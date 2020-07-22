@@ -1,0 +1,155 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  #call-frame,
+  #ui-container {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-rows: 1fr 0.5fr 0.5fr;
+    grid-template-columns: 0.5fr 0.5fr 1fr;
+  }
+  
+  #ui-local {
+    background-color: #e8e8e8;
+    color: #343434;
+    grid-area: 1 / 1;
+    grid-column-end: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #ui-controller {
+    background-color: #383838;
+    grid-area: 2 / 1 / 4 / 2;
+    padding: 30px;
+  }
+  #ui-controller hr,
+  #ui-participant hr {
+    border: 0.5px solid #4f4f4f;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25em; /** 20/16px **/
+  }
+  
+  #ui-participant {
+      display: flex; 
+      flex-direction: column; 
+  }
+  
+  #ui-participant-guests {
+      display: flex; 
+      flex-direction: column; 
+  }
+  
+  #ui-chat {
+    display: flex; 
+    flex-direction: column; 
+    border: 2px solid white; 
+  }
+  
+  #messages {
+    background-color: white;
+  }
+  
+  #messages p {
+    color: black; 
+    font-weight: 200; 
+  }
+  
+  #chat-input-wrapper {
+    display: flex; 
+    flex-direction: row; 
+  }
+  
+  #chatbox {
+    width: 100%; 
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    font-size: 0.9em;
+  }
+  
+  #send-message-button {
+    background-color: #383838;
+  }
+  
+  .ui-controller-control,
+  .ui-participant-guest, 
+  #ui-participant-local {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.25em; /** 20/16px **/
+  }
+  .ui-controller-control p,
+  .ui-participant-guest p {
+    margin: 0;
+  }
+  
+  .ui-controller-control,
+  .ui-participant-guest {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.25em; /** 20/16px **/
+  }
+  
+  .ui-controller-control img,
+  .ui-participant-guest img, #ui-participant-local img {
+    width: 24px;
+    height: 24px;
+  }
+  .ui-controller-control:last-child {
+    margin-bottom: 0;
+  }
+  .ui-controller-control:hover {
+    opacity: 0.4;
+  }
+  
+  #ui-participant {
+    background-color: #242424;
+    grid-area: 2 / 2 / 4 / 2;
+    padding: 30px;
+    display: flex;
+    flex-direction: column; 
+  }
+  
+  @media (max-width: 1000px) {
+    #ui-controller {
+      grid-area: 2 / 1 / 2 / 3;
+    }
+    #ui-participant {
+      grid-area: 3 / 1 / 3 / 3;
+    }
+    .ui-controller-control,
+    .ui-participant-guest,
+    #ui-controller hr,
+    #ui-participant hr {
+      margin-bottom: 0.625em;
+    }
+  }
+  
+  @media (max-width: 800px) {
+    #call-frame {
+      z-index: 100;
+      top: 197px;
+      height: calc(100vh - 197px);
+    }
+    #ui-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 197px;
+    }
+    #ui-controller {
+      grid-area: 1 / 1;
+    }
+    #ui-participant {
+      display: none;
+    }
+  }
+  

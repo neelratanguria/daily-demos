@@ -1,0 +1,207 @@
+<html>
+  <head>
+    <title>Video chat</title>
+    <script src="https://unpkg.com/@daily-co/daily-js"></script>
+    <link rel="stylesheet" href="./styles/page-styles.css" />
+  </head>
+
+  <body onload="startCall()">
+    <iframe id="call-frame" allow="camera; microphone; autoplay"></iframe>
+    <div id="ui-container">
+      <div id="ui-local">
+        <p>Loading your video feed…</p>
+      </div>
+      <div id="ui-controller">
+        <div
+          onclick="callFrame.setLocalVideo(!callFrame.localVideo())"
+          class="ui-controller-control"
+        >
+          <p>Toggle camera</p>
+          <img src="./icon-assets/icon-camera.svg" alt="Toggle Camera On/Off" />
+        </div>
+        <div
+          onclick="callFrame.setLocalAudio(!callFrame.localAudio())"
+          class="ui-controller-control"
+        >
+          <p>Toggle microphone</p>
+          <img
+            src="./icon-assets/icon-microphone.svg"
+            alt="Toggle Microphone On/Off"
+          />
+        </div>
+        <div onclick="toggleChat()" class="ui-controller-control">
+          <p id="chat-label">Chat</p>
+          <img src="./icon-assets/icon-chat.png" alt="Chat icon" />
+        </div>
+        <hr />
+        <div id="leave-call-div" class="ui-controller-control">
+          <p id="leave-call-label" style="color: #ff3b30;"></p>
+          <img src="./icon-assets/icon-leave.svg" alt="Leave call" />
+        </div>
+      </div>
+
+      <div id="ui-participant">
+        <p>Participants</p>
+        <div id="ui-participant-local">
+          <em>You</em>
+        </div>
+        <div id="ui-participant-guests"></div>
+        <!--Set inline to display: none so does not load on call-->
+        <div id="ui-chat">
+          <div id="messages">
+            <!--Chats will show up here!-->
+          </div>
+          <div id="chat-input-wrapper">
+            <input
+              id="chatbox"
+              type="text"
+              placeholder="Type a message to start a chat..."
+            />
+            <button onclick="sendMessage()"id="send-message-button">
+              <img
+                src="./icon-assets/icon-send-chat.png"
+                alt="Send chat icon"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      let displayChat,
+        chatLabel = document.getElementById("chat-label"), 
+        chatWindow = document.getElementById("ui-chat"),
+        messages = document.getElementById("messages"),
+        chatbox = document.getElementById("chatbox"); 
+      /**
+       *  Initializes a Daily.co call and creates the iframe
+       *
+       */
+      async function startCall() {
+        // For demo purposes, I'm hard-coding the meeting room.
+        // This is NOT a best practice in production. For more on creating rooms securely, head to: https://docs.daily.co/reference#rooms
+        room = { url: "https://kimberlee-daily.daily.co/test-chat" };
+
+        callFrame = window.DailyIframe.wrap(
+          document.getElementById("call-frame"),
+          { customLayout: true }
+        );
+
+        callFrame
+          .on("joined-meeting", joinedCall)
+          .on("participant-joined", updateParticipantList)
+          .on("left-meeting", leftCall)
+          .on("participant-left", updateParticipantList)
+          .on("app-message", updateChat);
+        await callFrame.join({
+          url: room.url,
+          cssFile: "./styles/callframe-styles.css",
+        });
+      }
+
+      /**
+       * Displays the chat window on user click
+       * Changes style of "Chat" text from red, after new message, to white once clicked
+       */
+      async function toggleChat() {
+        //let chatWindow = document.getElementById("ui-chat");
+        if (!displayChat) {
+          displayChat = true;
+          chatWindow.style.display = "flex";
+        } else {
+          displayChat = false;
+          chatWindow.style.display = "none";
+        }
+        if ((chatLabel.style.color = "red")) {
+          chatLabel.style.color = "white";
+        }
+      }
+
+      /**
+       * Updates a participant's local chat window display when the send button is clicked
+       * Uses sendAppMessage() to broadcast the message the participant typed to all participants
+       */
+      async function sendMessage() {
+        // Local update
+        let newMessage = document.createElement("p");
+        newMessage.innerHTML = `<span style="font-weight:500">You</span>: ${chatbox.value}`;
+        messages.appendChild(newMessage);
+
+        // Broadcast update
+        newMessage = {
+          message: chatbox.value,
+        };
+        callFrame.sendAppMessage(newMessage, "*");
+        chatbox.value = "";
+      }
+
+      /**
+       * Responds to an app-message event
+       * Appends a new "p" element to the "messages" div with the message the participant typed and their userName, if available
+       * Also updates the "Chat" text to red when a new message has been sent
+       */
+      async function updateChat(e) {
+        let participants = callFrame.participants(),
+          userName = participants[e.fromId].user_name,
+          newMessage = document.createElement("p");
+        newMessage.innerHTML = `<span style="font-weight:500">${
+          participants[e.fromId].user_name || "Guest"
+        }</span>: ${e.data.message}`;
+        messages.appendChild(newMessage);
+        chatLabel.style.color = "red";
+      }
+
+      /**
+       *  Removes the loading screen when a participant joins a call
+       *  Toggles label display when a user joins
+       */
+      async function joinedCall() {
+        // Toggle functionality to make sure buttons only work on join
+        document.getElementById("ui-local").style.display = "none";
+        document.getElementById("leave-call-label").innerHTML = "Leave call";
+        document.getElementById("leave-call-div").onclick = () => {
+          callFrame.leave();
+        };
+      }
+
+      /**
+       *  Updates participant list based on who is in a call and triggers the chat to send to whoever was not in the meeting
+       *  @param {Object} e is the event information Daily.co returns
+       */
+      async function updateParticipantList(e) {
+        // Get all the participants on the call
+        participants = callFrame.participants();
+        let wrapper = document.getElementById("ui-participant-guests");
+        wrapper.innerHTML = "";
+
+        // Loop through participants, adding their names to the list
+        Object.keys(participants).forEach((p) => {
+          if (p === "local") {
+            return; // "You" is already added for the local user
+          }
+          let participant = participants[p];
+          wrapper.innerHTML += `
+        <div class="ui-participant-guest">
+            <p>${participant.user_name || "Guest"}</p>
+        </div>`;
+        });
+      }
+
+      /**
+       *  Toggles display settings when a user leaves a call
+       * Calls updateParticipantList passing in the information about the user who left
+       *  @param {Object} e is the event information Daily.co returns
+       */
+      async function leftCall(e) {
+        // Display the Join Call option
+        document.getElementById("leave-call-label").innerHTML = "Join call";
+        document.getElementById("leave-call-div").onclick = () => {
+          callFrame.join();
+        };
+        // Clear the participants' list locally
+        document.getElementById("ui-participant-local").style.display = "none";
+        updateParticipantList(e);
+      }
+    </script>
+  </body>
+</html>
