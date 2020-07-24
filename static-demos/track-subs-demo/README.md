@@ -13,13 +13,10 @@ This demo makes use of the following:
 
 Start by adding a meeting url and (owner) token in `createRoom()`. This allows people to join as an owner or a participant (guest). Owners will be displayed to everyone in the meeting. Guests will be displayed for 30 seconds when they join, so they can say "Hi!" to everyone. There are also `subscribe` and `unsubscribe` buttons to allow you to demonstrate how `setSubscribeToTracksAutomatically()` works. 
 
-To learn more about how we built this, read our [blog post](). 
-
-## Live Example 
-Try a live demo [here]()
+To learn more about how we built this, read our [blog post](https://daily.co/blog/create-dynamic-meetings-using-track-subscriptions). 
 
 ## Running locally 
-1. Make sure you've followed the [instructions at the []root of the daily-demos repo](https://github.com/daily-co/daily-demos)
+1. Make sure you've followed the [instructions at the root of the daily-demos repo](https://github.com/daily-co/daily-demos)
 2. `cd static-demos` 
 3. `npm run start` or `npm run dev`
 4. Then open your browser and go to `localhost:<port>/static-demos/track-subs-demo/index.html`
