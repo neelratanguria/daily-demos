@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build package
         run: git archive --format=zip -o deploy.zip ${GITHUB_SHA}
-      - name: Get Last Commit
+      - name: Get Last Commit Message
         id: getcommit
         run: echo "::set-output name=description::$(git log -1 --pretty=%B)"
       - name: Deploy to Elastic Beanstalk
@@ -25,6 +25,7 @@ jobs:
           version_label: ${{ env.GITHUB_SHA }}
           version_description: ${{ steps.getcommit.outputs.description }}
           region: us-east-1
+          use_existing_version_if_available: true
           deployment_package: deploy.zip
       - name: Checkout private GitHub Action
         uses: actions/checkout@v2
@@ -33,7 +34,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: .github/actions/create-tag-action
       - name: Tag the deployment
-        uses: ./.github/actions/create-tag-action
+        uses: .github/actions/create-tag-action
         with:
           app-name: daily-demos
           environment: qa
