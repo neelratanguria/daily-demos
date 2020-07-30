@@ -2,7 +2,7 @@ name: Elastic Beanstalk Deployment
 
 on:
   push:
-    branches: [main]
+    branches: [auto-tagging-and-deployment]
 
 jobs:
   build-and-deploy:
