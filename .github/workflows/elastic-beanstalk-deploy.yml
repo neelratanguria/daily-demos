@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.SECRET_GITHUB_ACTIONS_PAT }}
           path: .github/actions/create-tag-action
       - name: Tag the deployment
-        uses: .github/actions/create-tag-action
+        uses: ./.github/actions/create-tag-action
         with:
           app-name: daily-demos
           environment: qa
