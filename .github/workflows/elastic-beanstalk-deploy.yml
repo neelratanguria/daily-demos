@@ -22,7 +22,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: daily-demos
           environment_name: daily-demos-test
-          version_label: ${{ env.GITHUB_SHA }}
+          version_label: ${{ github.sha }}
           version_description: ${{ steps.getcommit.outputs.description }}
           region: us-east-1
           use_existing_version_if_available: true
