@@ -2,7 +2,7 @@ name: Elastic Beanstalk Deployment
 
 on:
   push:
-    branches: [auto-tagging-and-deployment]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -21,7 +21,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: daily-demos
-          environment_name: daily-demos-test
+          environment_name: daily-demos-env
           version_label: ${{ github.sha }}
           version_description: ${{ steps.getcommit.outputs.description }}
           region: us-east-1
@@ -37,5 +37,5 @@ jobs:
         uses: ./.github/actions/create-tag-action
         with:
           app-name: daily-demos
-          environment: qa
+          environment: prod
           github-token: ${{ secrets.GITHUB_TOKEN }}
