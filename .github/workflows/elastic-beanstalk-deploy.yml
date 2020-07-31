@@ -1,0 +1,41 @@
+name: Elastic Beanstalk Deployment
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Build package
+        run: git archive --format=zip -o deploy.zip ${GITHUB_SHA}
+      - name: Get Last Commit Message
+        id: getcommit
+        run: echo "::set-output name=description::$(git log -1 --pretty=%B)"
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v10
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: daily-demos
+          environment_name: daily-demos-env
+          version_label: ${{ github.sha }}
+          version_description: ${{ steps.getcommit.outputs.description }}
+          region: us-east-1
+          use_existing_version_if_available: true
+          deployment_package: deploy.zip
+      - name: Checkout private GitHub Action
+        uses: actions/checkout@v2
+        with:
+          repository: daily-co/create-tag-action
+          token: ${{ secrets.SECRET_GITHUB_ACTIONS_PAT }}
+          path: .github/actions/create-tag-action
+      - name: Tag the deployment
+        uses: ./.github/actions/create-tag-action
+        with:
+          app-name: daily-demos
+          environment: prod
+          github-token: ${{ secrets.GITHUB_TOKEN }}
