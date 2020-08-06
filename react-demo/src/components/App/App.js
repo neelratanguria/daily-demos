@@ -142,6 +142,28 @@ export default function App() {
   }, [callObject]);
 
   /**
+   * Listen for app messages from other call participants.
+   */
+  useEffect(() => {
+    if (!callObject) {
+      return;
+    }
+
+    function handleAppMessage(event) {
+      if (event) {
+        logDailyEvent(event);
+        console.log(`received app message from ${event.fromId}: `, event.data);
+      }
+    }
+
+    callObject.on('app-message', handleAppMessage);
+
+    return function cleanup() {
+      callObject.off('app-message', handleAppMessage);
+    };
+  }, [callObject]);
+
+  /**
    * Show the call UI if we're either joining, already joined, or are showing
    * an error.
    */

@@ -8,6 +8,7 @@ import './Tile.css';
  * - isLocalPerson: boolean
  * - isLarge: boolean
  * - isLoading: boolean
+ * - onClick: Function
  */
 export default function Tile(props) {
   const videoEl = useRef(null);
@@ -54,7 +55,7 @@ export default function Tile(props) {
   }
 
   return (
-    <div className={getClassNames()}>
+    <div className={getClassNames()} onClick={props.onClick}>
       <div className="background" />
       {getLoadingComponent()}
       {getVideoComponent()}
