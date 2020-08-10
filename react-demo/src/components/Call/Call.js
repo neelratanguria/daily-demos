@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useReducer } from 'react';
+import React, { useEffect, useContext, useReducer, useCallback } from 'react';
 import './Call.css';
 import Tile from '../Tile/Tile';
 import CallObjectContext from '../../CallObjectContext';
@@ -119,6 +119,17 @@ export default function Call() {
     };
   }, []);
 
+  /**
+   * Send an app message to the remote participant whose tile was clicked on.
+   */
+  const sendHello = useCallback(
+    (participantId) => {
+      callObject &&
+        callObject.sendAppMessage({ hello: 'world' }, participantId);
+    },
+    [callObject]
+  );
+
   function getTiles() {
     let largeTiles = [];
     let smallTiles = [];
@@ -134,6 +145,13 @@ export default function Call() {
           isLocalPerson={isLocal(id)}
           isLarge={isLarge}
           isLoading={callItem.isLoading}
+          onClick={
+            isLocal(id)
+              ? null
+              : () => {
+                  sendHello(id);
+                }
+          }
         />
       );
       if (isLarge) {
