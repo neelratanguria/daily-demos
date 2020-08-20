@@ -13,7 +13,8 @@
     "static-demos-install": "cd static-demos && npm i",
     "react-demo-start": "cd react-demo && npm run build && npm run start",
     "react-demo-dev": "cd react-demo && npm run dev",
-    "react-demo-install": "cd react-demo && npm i"
+    "react-demo-install": "cd react-demo && npm i",
+    "react-demo-stream-chat-install": "cd react-demo-stream-chat && npm i"
   },
   "repository": {
     "type": "git",

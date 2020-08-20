@@ -26,6 +26,13 @@ app.use(
   })
 );
 
+app.use(
+  '/react-demo-stream-chat', 
+  createProxyMiddleware({
+    target: 'http://localhost:8080'
+  })
+)
+
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
