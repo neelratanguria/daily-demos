@@ -5,7 +5,9 @@ import TrayButton, {
   TYPE_MUTE_MIC,
   TYPE_SCREEN,
   TYPE_LEAVE,
+  TYPE_CHAT
 } from '../TrayButton/TrayButton';
+// import ChatWidget from '../ChatWidget/ChatWidget';
 import CallObjectContext from '../../CallObjectContext';
 import { logDailyEvent } from '../../logUtils';
 import DailyIframe from '@daily-co/daily-js';
@@ -41,7 +43,8 @@ export default function Tray(props) {
   const callObject = useContext(CallObjectContext);
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
-  const [isSharingScreen, setSharingScreen] = useState(false);
+  const [isSharingScreen, setSharingScreen] = useState(false); 
+  let displayChat = false; 
 
   function toggleCamera() {
     callObject.setLocalVideo(isCameraMuted);
@@ -59,6 +62,16 @@ export default function Tray(props) {
 
   function leaveCall() {
     props.onClickLeaveCall && props.onClickLeaveCall();
+  }
+
+  function toggleChat() {
+    if (!displayChat) {
+      displayChat = true; 
+      console.log(displayChat); 
+    } else {
+      displayChat = false; 
+      console.log(displayChat); 
+    }
   }
 
   /**
@@ -113,12 +126,18 @@ export default function Tray(props) {
         />
       )}
       <TrayButton
+        type={TYPE_CHAT}
+        disabled={props.disabled}
+        onClick={toggleChat}
+      />
+      <TrayButton
         type={TYPE_LEAVE}
         disabled={props.disabled}
         newButtonGroup={true}
         highlighted={true}
         onClick={leaveCall}
       />
+      {/* <ChatWidget display={displayChat}/>  */}
     </div>
   );
 }

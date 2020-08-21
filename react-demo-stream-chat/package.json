@@ -10,7 +10,8 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
-    "serve": "^11.3.0"
+    "serve": "^11.3.0",
+    "stream-chat-react": "^2.2.2"
   },
   "scripts": {
     "dev": "PORT=8080 react-scripts start",
