@@ -44,7 +44,6 @@ export default function Tray(props) {
   const [isCameraMuted, setCameraMuted] = useState(false);
   const [isMicMuted, setMicMuted] = useState(false);
   const [isSharingScreen, setSharingScreen] = useState(false); 
-  let displayChat = false; 
 
   function toggleCamera() {
     callObject.setLocalVideo(isCameraMuted);
@@ -64,14 +63,8 @@ export default function Tray(props) {
     props.onClickLeaveCall && props.onClickLeaveCall();
   }
 
-  function toggleChat() {
-    if (!displayChat) {
-      displayChat = true; 
-      console.log(displayChat); 
-    } else {
-      displayChat = false; 
-      console.log(displayChat); 
-    }
+  function displayChat() {
+    props.onClickDisplayChat && props.onClickDisplayChat(); 
   }
 
   /**
@@ -128,7 +121,7 @@ export default function Tray(props) {
       <TrayButton
         type={TYPE_CHAT}
         disabled={props.disabled}
-        onClick={toggleChat}
+        onClick={displayChat}
       />
       <TrayButton
         type={TYPE_LEAVE}

@@ -8,18 +8,20 @@ import CallObjectContext from '../../CallObjectContext';
 import { roomUrlFromPageUrl, pageUrlFromRoomUrl } from '../../urlUtils';
 import DailyIframe from '@daily-co/daily-js';
 import { logDailyEvent } from '../../logUtils';
+import ChatWidget from '../ChatWidget/ChatWidget';
 
 const STATE_IDLE = 'STATE_IDLE';
 const STATE_CREATING = 'STATE_CREATING';
 const STATE_JOINING = 'STATE_JOINING';
 const STATE_JOINED = 'STATE_JOINED';
 const STATE_LEAVING = 'STATE_LEAVING';
-const STATE_ERROR = 'STATE_ERROR';
+const STATE_ERROR = 'STATE_ERROR'; 
 
 export default function App() {
   const [appState, setAppState] = useState(STATE_IDLE);
   const [roomUrl, setRoomUrl] = useState(null);
   const [callObject, setCallObject] = useState(null);
+  const [displayChat, setDisplayChat] = useState(null)
 
   /**
    * Creates a new call room.
@@ -196,6 +198,13 @@ export default function App() {
    */
   const enableStartButton = appState === STATE_IDLE;
 
+  /**
+   * Display the text chat interface if the user clicks on the Chat icon 
+   */
+  function toggleChatDisplay() {
+    setDisplayChat(!displayChat); 
+  }
+
   return (
     <div className="app">
       {showCall ? (
@@ -208,7 +217,9 @@ export default function App() {
           <Tray
             disabled={!enableCallButtons}
             onClickLeaveCall={startLeavingCall}
+            onClickDisplayChat={toggleChatDisplay}
           />
+          <ChatWidget display={displayChat}/>
         </CallObjectContext.Provider>
       ) : (
         <StartButton
