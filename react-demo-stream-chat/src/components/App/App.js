@@ -15,13 +15,13 @@ const STATE_CREATING = 'STATE_CREATING';
 const STATE_JOINING = 'STATE_JOINING';
 const STATE_JOINED = 'STATE_JOINED';
 const STATE_LEAVING = 'STATE_LEAVING';
-const STATE_ERROR = 'STATE_ERROR'; 
+const STATE_ERROR = 'STATE_ERROR';
 
 export default function App() {
   const [appState, setAppState] = useState(STATE_IDLE);
   const [roomUrl, setRoomUrl] = useState(null);
   const [callObject, setCallObject] = useState(null);
-  const [displayChat, setDisplayChat] = useState(null)
+  const [displayChat, setDisplayChat] = useState(null);
 
   /**
    * Creates a new call room.
@@ -199,10 +199,10 @@ export default function App() {
   const enableStartButton = appState === STATE_IDLE;
 
   /**
-   * Display the text chat interface if the user clicks on the Chat icon 
+   * Display the text chat interface if the user clicks on the Chat icon
    */
   function toggleChatDisplay() {
-    setDisplayChat(!displayChat); 
+    setDisplayChat(!displayChat);
   }
 
   return (
@@ -214,12 +214,12 @@ export default function App() {
         // call object, this can be a helpful pattern.
         <CallObjectContext.Provider value={callObject}>
           <Call roomUrl={roomUrl} />
-          <Tray
-            disabled={!enableCallButtons}
-            onClickLeaveCall={startLeavingCall}
-            onClickDisplayChat={toggleChatDisplay}
-          />
-          <ChatWidget display={displayChat}/>
+          <ChatWidget display={displayChat} />
+            <Tray
+              disabled={!enableCallButtons}
+              onClickLeaveCall={startLeavingCall}
+              onClickDisplayChat={toggleChatDisplay}
+            />
         </CallObjectContext.Provider>
       ) : (
         <StartButton

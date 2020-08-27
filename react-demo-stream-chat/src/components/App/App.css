@@ -4,3 +4,9 @@
   height: 100%;
   width: 100%;
 }
+
+.str-chat {
+  position: absolute; 
+  width: 30%; 
+  right: 50%; 
+}
