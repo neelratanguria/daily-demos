@@ -8,6 +8,7 @@ import CallObjectContext from '../../CallObjectContext';
 import { roomUrlFromPageUrl, pageUrlFromRoomUrl } from '../../urlUtils';
 import DailyIframe from '@daily-co/daily-js';
 import { logDailyEvent } from '../../logUtils';
+// We added a ChatWidget component. 
 import ChatWidget from '../ChatWidget/ChatWidget';
 
 const STATE_IDLE = 'STATE_IDLE';
@@ -21,6 +22,7 @@ export default function App() {
   const [appState, setAppState] = useState(STATE_IDLE);
   const [roomUrl, setRoomUrl] = useState(null);
   const [callObject, setCallObject] = useState(null);
+  // We added state for whether or not text chat will be displayed.
   const [displayChat, setDisplayChat] = useState(null);
 
   /**
@@ -199,7 +201,9 @@ export default function App() {
   const enableStartButton = appState === STATE_IDLE;
 
   /**
-   * Display the text chat interface if the user clicks on the Chat icon
+   * Display the ChatWidget if the user clicks on the Chat icon.
+   * We'll pass this function down to the Tray component, which holds our Chat icon. 
+   * We also need to pass the displayChat boolean to the ChatWidget itself, to conditionally render. 
    */
   function toggleChatDisplay() {
     setDisplayChat(!displayChat);
@@ -215,11 +219,11 @@ export default function App() {
         <CallObjectContext.Provider value={callObject}>
           <Call roomUrl={roomUrl} />
           <ChatWidget display={displayChat} />
-            <Tray
-              disabled={!enableCallButtons}
-              onClickLeaveCall={startLeavingCall}
-              onClickDisplayChat={toggleChatDisplay}
-            />
+          <Tray
+            disabled={!enableCallButtons}
+            onClickLeaveCall={startLeavingCall}
+            onClickDisplayChat={toggleChatDisplay}
+          />
         </CallObjectContext.Provider>
       ) : (
         <StartButton

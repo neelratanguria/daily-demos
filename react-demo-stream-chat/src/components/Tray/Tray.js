@@ -63,6 +63,9 @@ export default function Tray(props) {
     props.onClickLeaveCall && props.onClickLeaveCall();
   }
 
+  /**
+   * Display the ChatWidget on click, calling function passed down as prop. 
+   */
   function displayChat() {
     props.onClickDisplayChat && props.onClickDisplayChat(); 
   }
