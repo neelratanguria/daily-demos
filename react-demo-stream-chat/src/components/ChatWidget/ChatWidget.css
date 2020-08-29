@@ -1,6 +1,15 @@
 .str-chat {
     position: absolute; 
     bottom: 5%; 
-    left: 70%; 
-    width: 30%;
+    left: 79%; 
+    width: 20%;
+  }
+
+  .str-chat-channel {
+    max-height: 80%; 
+    margin-bottom: 2%; 
+  }
+
+  .str-chat-channel.messaging .str-chat__main-panel  {
+    padding: 0; 
   }

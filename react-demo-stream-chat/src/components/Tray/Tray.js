@@ -7,7 +7,6 @@ import TrayButton, {
   TYPE_LEAVE,
   TYPE_CHAT
 } from '../TrayButton/TrayButton';
-// import ChatWidget from '../ChatWidget/ChatWidget';
 import CallObjectContext from '../../CallObjectContext';
 import { logDailyEvent } from '../../logUtils';
 import DailyIframe from '@daily-co/daily-js';
