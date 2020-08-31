@@ -30,7 +30,7 @@ export default function ChatWidget(props) {
   const displayChat = props.display;
 
   /**
-   * Once call state is 'joined-meeting', also join a Stream chat
+   * When a local participant joins a meeting 'joined-meeting', have them also join chat. 
    *
    */
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function ChatWidget(props) {
               );
 
               // Create a channel, using setChannel
-              const channel = chatClient.channel('messaging', 'team-chat');
+              const channel = chatClient.channel('messaging', 'text-chat');
               setChannel(channel);
 
               setChatState(STATE_JOINED_CHAT);
@@ -110,25 +110,6 @@ export default function ChatWidget(props) {
     }
     callObject.on('left-meeting', leaveStreamChat);
   }, [callObject, chatClient]);
-
-  /**
-   * When only one person is left in the call, delete the channel.
-   *
-   */
-  useEffect(() => {
-    function clearStreamChat(event) {
-      const participantCount = Object.keys(callObject.participants()).length;
-      if (event && participantCount === 1) {
-        try {
-          channel.delete();
-          setChatState(STATE_LEFT_CHAT);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-    callObject.on('participant-left', clearStreamChat);
-  }, [callObject, channel]);
 
   const chatAvailable = [STATE_JOINING_CHAT, STATE_JOINED_CHAT].includes(
     chatState
