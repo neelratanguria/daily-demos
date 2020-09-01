@@ -38,7 +38,7 @@ export default function ChatWidget(props) {
       return;
     }
 
-    function joinStreamChat(event) {
+    function joinStreamChat(event) { 
       // Get the username and session_id from the joined-meeting event
       const id = event.participants.local.session_id;
       const username = event.participants.local.user_name
