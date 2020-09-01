@@ -58,9 +58,18 @@ export default function App() {
    */
   const startLeavingCall = useCallback(() => {
     if (!callObject) return;
-    setAppState(STATE_LEAVING);
-    callObject.leave();
-  }, [callObject]);
+    // If we're in the error state, we've already "left", so just clean up
+    if (appState === STATE_ERROR) {
+      callObject.destroy().then(() => {
+        setRoomUrl(null);
+        setCallObject(null);
+        setAppState(STATE_IDLE);
+      });
+    } else {
+      setAppState(STATE_LEAVING);
+      callObject.leave();
+    }
+  }, [callObject, appState]);
 
   /**
    * If a room's already specified in the page's URL when the component mounts,
