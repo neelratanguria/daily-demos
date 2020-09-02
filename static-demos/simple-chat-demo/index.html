@@ -2,6 +2,7 @@
   <head>
     <title>Video chat</title>
     <script src="https://unpkg.com/@daily-co/daily-js"></script>
+    <script src="../shared-assets/create-demo-room.js"></script>
     <link rel="stylesheet" href="./styles/page-styles.css" />
   </head>
 
@@ -35,7 +36,7 @@
         </div>
         <hr />
         <div id="leave-call-div" class="ui-controller-control">
-          <p id="leave-call-label" style="color: #ff3b30;"></p>
+          <p id="leave-call-label" style="color: #ff3b30"></p>
           <img src="./icon-assets/icon-leave.svg" alt="Leave call" />
         </div>
       </div>
@@ -57,7 +58,7 @@
               type="text"
               placeholder="Type a message to start a chat..."
             />
-            <button onclick="sendMessage()"id="send-message-button">
+            <button onclick="sendMessage()" id="send-message-button">
               <img
                 src="./icon-assets/icon-send-chat.png"
                 alt="Send chat icon"
@@ -69,21 +70,31 @@
     </div>
     <script>
       let displayChat,
-        chatLabel = document.getElementById("chat-label"), 
-        chatWindow = document.getElementById("ui-chat"),
-        messages = document.getElementById("messages"),
-        chatbox = document.getElementById("chatbox"); 
+        chatLabel = document.getElementById('chat-label'),
+        chatWindow = document.getElementById('ui-chat'),
+        messages = document.getElementById('messages'),
+        chatbox = document.getElementById('chatbox');
       /**
        *  Initializes a Daily.co call and creates the iframe
        *
        */
       async function startCall() {
-        // For demo purposes, I'm hard-coding the meeting room.
-        // This is NOT a best practice in production. For more on creating rooms securely, head to: https://docs.daily.co/reference#rooms
-        room = { url: "https://kimberlee-daily.daily.co/test-chat" };
+        // create a short-lived demo room and a join token with
+        // is_owner set to true. if you just want to
+        // hard-code a meeting link for testing you could do
+        // something like this:
+        //
+        //   room = { url: 'https://your-domain.daily.co/hello' }
+        //   ownerLink = room.url;
+        // But, you'll want to approach this differently in production!
+        // For more on creating rooms securely, head to: https://docs.daily.co/reference#rooms
+        room = await createMtgRoom();
+        ownerLink = await createMtgLinkWithToken(room, {
+          is_owner: true,
+        });
 
         callFrame = window.DailyIframe.wrap(
-          document.getElementById("call-frame"),
+          document.getElementById('call-frame'),
           { customLayout: true }
         );
 
