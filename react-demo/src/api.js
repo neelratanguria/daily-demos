@@ -17,10 +17,10 @@ const newRoomEndpoint =
 async function createRoom() {
   let response = await fetch(newRoomEndpoint),
     room = await response.json();
-  return room;
+  //return room;
 
   // Comment out the above and uncomment the below, using your own URL
-  // return { url: "https://your-domain.daily.co/hello" };
+   return { url: "https://prantae.daily.co/Rwar" };
 }
 
 export default { createRoom };

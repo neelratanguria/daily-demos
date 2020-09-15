@@ -13,10 +13,10 @@
     "serve": "^11.3.0"
   },
   "scripts": {
-    "dev": "PORT=3002 react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "postbuild": "mv build temp-build && mkdir build && mv temp-build build && mv build/temp-build build/react-demo",
-    "start": "PORT=3002 serve build",
+    "start": "serve build",
     "eject": "react-scripts eject"
   },
   "homepage": "react-demo",
